@@ -21,7 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-/src/components/LoginPage
-/src/components/NewEntryPage
-/src/components/RecordsPage

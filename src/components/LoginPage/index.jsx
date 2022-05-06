@@ -13,7 +13,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function confirmLogin(event) {

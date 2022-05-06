@@ -10,7 +10,6 @@ export default function RegisterPage() {
   const [newUser, setNewUser] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function confirmRegister(event) {

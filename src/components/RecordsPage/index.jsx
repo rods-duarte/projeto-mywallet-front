@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 
@@ -15,9 +16,11 @@ import { Link } from "react-router-dom";
 export default function RecordsPage() {
   const [pageData, setPageData] = useState(null);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function getRecords() {
+    console.log(user.userId);
     const URL = `http://localhost:5000/users/${user.userId}`;
     axios
       .get(URL, {
@@ -35,7 +38,19 @@ export default function RecordsPage() {
   }
 
   function logout() {
-    console.log("logout");
+    const URL = "http://localhost:5000/sign-out";
+    axios
+      .delete(URL, {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      })
+      .then((response) => {
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(getRecords, []);

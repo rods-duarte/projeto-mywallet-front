@@ -11,7 +11,7 @@ import Logo from "../../assets/images/MyWalletLogo.svg";
 export default function LoginPage() {
   const [credentials, setCredentials] = useState({});
   const [loading, setLoading] = useState(false);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
@@ -24,10 +24,20 @@ export default function LoginPage() {
       .then((response) => {
         const { data } = response;
         setUser({ ...data });
-        navigate("/records");
+        const updateStatus = setInterval(() => {
+          const URL = "http://localhost:5000/status";
+
+          axios.put(URL, undefined, {
+            headers: {
+              authorization: `Bearer ${data.token}`,
+            },
+          });
+        }, 5000);
+        navigate("/records", { state: { updateStatus } });
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
+        alert(err.response.data);
         setLoading(false);
       });
   }

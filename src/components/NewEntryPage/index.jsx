@@ -16,13 +16,14 @@ export default function NewEntryPage() {
 
   function addEntry(event) {
     const URL = `http://localhost:5000/users/${user.userId}`;
+    const { updateStatus } = location.state;
     event.preventDefault();
     axios
       .post(URL, entryData, {
         headers: { authorization: `Bearer ${user.token}` },
       })
       .then((response) => {
-        navigate("/records");
+        navigate("/records", { state: { updateStatus } });
       });
   }
 
@@ -34,6 +35,8 @@ export default function NewEntryPage() {
       <form onSubmit={addEntry}>
         <input
           type="number"
+          min="1"
+          step="any"
           placeholder="Valor"
           value={entryData.value}
           onChange={(e) => {
@@ -114,12 +117,5 @@ const NewEntry = styled.main`
 
   button:hover {
     background-color: #9725c9;
-  }
-
-  span {
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: underline;
   }
 `;

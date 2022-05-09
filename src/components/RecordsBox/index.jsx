@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import Entry from "../Entry";
 
-export default function RecordsBox({ pageData }) {
+export default function RecordsBox({ pageData, setPageData }) {
   const balance = pageData?.records
     .reduce((acc, element) => {
       if (element.type === "positive") {
@@ -17,7 +17,14 @@ export default function RecordsBox({ pageData }) {
     <>
       <div className="records">
         {pageData.records.map((record) => {
-          return <Entry entryData={record} />;
+          return (
+            <Entry
+              key={record._id}
+              entryData={record}
+              pageData={pageData}
+              setPageData={setPageData}
+            />
+          );
         })}
       </div>
       <div className="balance">

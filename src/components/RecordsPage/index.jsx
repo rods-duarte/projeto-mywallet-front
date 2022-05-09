@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 
@@ -15,12 +15,12 @@ import { Link } from "react-router-dom";
 
 export default function RecordsPage() {
   const [pageData, setPageData] = useState(null);
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function getRecords() {
-    console.log(user.userId);
     const URL = `http://localhost:5000/users/${user.userId}`;
     axios
       .get(URL, {
@@ -30,10 +30,9 @@ export default function RecordsPage() {
       })
       .then((response) => {
         setPageData(response.data);
-        console.log(response.data);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   }
 
@@ -46,6 +45,8 @@ export default function RecordsPage() {
         },
       })
       .then((response) => {
+        clearInterval(location.state.updateStatus);
+        setUser(null);
         navigate("/");
       })
       .catch((err) => {
@@ -61,9 +62,15 @@ export default function RecordsPage() {
     <Records>
       <header>
         <h1>Ola, {pageData.name}</h1>
-        <img src={logOutIcon} alt="logout" onClick={logout} />
+        <img
+          src={logOutIcon}
+          alt="logout"
+          onClick={() => {
+            if (window.confirm("Tem certeza que quer sair ?")) logout();
+          }}
+        />
       </header>
-      <RecordsBox pageData={pageData} />
+      <RecordsBox pageData={pageData} setPageData={setPageData} />
       <Buttons>
         <Link
           className="btn-link"
@@ -75,7 +82,11 @@ export default function RecordsPage() {
             <span>Nova Entrada</span>
           </button>
         </Link>
-        <Link className="btn-link" to="/records/add" state={{ negative: true }}>
+        <Link
+          className="btn-link"
+          to="/records/add"
+          state={{ updateStatus: location.state.updateStatus, negative: true }}
+        >
           <button>
             <img src={minusIcon} alt="-" />
             <span>Nova Saida</span>
@@ -88,6 +99,7 @@ export default function RecordsPage() {
 
 const Records = styled.main`
   width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

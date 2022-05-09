@@ -21,7 +21,7 @@ export default function RecordsPage() {
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function getRecords() {
-    const URL = `http://localhost:5000/users/${user.userId}`;
+    const URL = `https://back-projeto-my-wallet.herokuapp.com/users/${user.userId}`;
     axios
       .get(URL, {
         headers: {
@@ -37,7 +37,7 @@ export default function RecordsPage() {
   }
 
   function logout() {
-    const URL = "http://localhost:5000/sign-out";
+    const URL = "https://back-projeto-my-wallet.herokuapp.com/sign-out";
     axios
       .delete(URL, {
         headers: {

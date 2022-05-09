@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 
 import UserContext from "../../contexts/UserContext";
@@ -10,20 +11,27 @@ export default function NewEntryPage() {
   const navigate = useNavigate();
   const { negative } = location.state;
   const { user } = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
   const [entryData, setEntryData] = useState({
     type: negative ? "negative" : "positive",
   });
 
+  const loadingSvg = <ThreeDots width="50px" color="#fff" />;
   function addEntry(event) {
-    const URL = `http://localhost:5000/users/${user.userId}`;
+    const URL = `https://back-projeto-my-wallet.herokuapp.com/users/${user.userId}`;
     const { updateStatus } = location.state;
     event.preventDefault();
+    setLoading(true);
     axios
       .post(URL, entryData, {
         headers: { authorization: `Bearer ${user.token}` },
       })
       .then((response) => {
         navigate("/records", { state: { updateStatus } });
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
       });
   }
 
@@ -38,6 +46,7 @@ export default function NewEntryPage() {
           min="1"
           step="any"
           placeholder="Valor"
+          disabled={loading}
           value={entryData.value}
           onChange={(e) => {
             setEntryData({ ...entryData, value: e.target.value });
@@ -46,12 +55,15 @@ export default function NewEntryPage() {
         <input
           type="text"
           placeholder="Descricao"
+          disabled={loading}
           value={entryData.desc}
           onChange={(e) => {
             setEntryData({ ...entryData, desc: e.target.value });
           }}
         />
-        <button type="submit">Salvar {negative ? "Saida" : "Entrada"}</button>
+        <button type="submit" disabled={loading}>
+          {loading ? loadingSvg : negative ? "Salvar Saida" : "Salvar Entrada"}
+        </button>
       </form>
     </NewEntry>
   );

@@ -16,7 +16,7 @@ export default function LoginPage() {
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function confirmLogin(event) {
-    const URL = "http://localhost:5000/sign-in";
+    const URL = "https://back-projeto-my-wallet.herokuapp.com/sign-in";
     event.preventDefault();
     setLoading(true);
     axios
@@ -25,7 +25,7 @@ export default function LoginPage() {
         const { data } = response;
         setUser({ ...data });
         const updateStatus = setInterval(() => {
-          const URL = "http://localhost:5000/status";
+          const URL = "https://back-projeto-my-wallet.herokuapp.com/status";
 
           axios.put(URL, undefined, {
             headers: {

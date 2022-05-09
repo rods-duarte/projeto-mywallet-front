@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const loadingSvg = <ThreeDots width="50px" color="#fff" />;
 
   function confirmRegister(event) {
-    const URL = "http://localhost:5000/sign-up";
+    const URL = "https://back-projeto-my-wallet.herokuapp.com/sign-up";
     event.preventDefault();
     setLoading(true);
     axios

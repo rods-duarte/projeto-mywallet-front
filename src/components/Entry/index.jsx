@@ -9,7 +9,7 @@ export default function Entry({ entryData, pageData, setPageData }) {
   const { user } = useContext(UserContext);
 
   function confirmDelete(_id) {
-    const URL = `http://localhost:5000/users/${_id}`;
+    const URL = `https://back-projeto-my-wallet.herokuapp.com/users/${_id}`;
     axios
       .delete(URL, {
         headers: {
